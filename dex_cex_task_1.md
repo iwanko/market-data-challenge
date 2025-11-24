@@ -10,13 +10,13 @@ Initial investment value:
 $$V_0 = x_0 + y_0 \times p_0 (= 2 \times x_0)$$
 
 Where $x$ is amount of USDT, $y$ - ETH, $p$ - price  
-The amount of $x$ rises with the price, $y$ - inversely. Let's denote dimensionless price change as $P$ ($= p' / p_0$; where $p'$ - new price):
+The amount of $x$ rises with the price, $y$ - inversely. Let's denote **dimensionless price change** as $P$ ($= p' / p_0$; where $p'$ - new price):
 
 $$x_1 = x_0 \times \sqrt{P}; \ \ \ \ \ \ y_1 = y_0 / \sqrt{P}$$
 
 Then the investment value as a function of price:
 
-$$V = x_0 \times \sqrt{P} + y_0 \times p_0 \times \frac{P}{\sqrt{P}} = \sqrt{P} \times (x_0 + y_0 \times p_0) = 2 \times x_0 \times \sqrt{P}$$
+$$V = x_0 \sqrt{P} + y_0 p_0 \frac{P}{\sqrt{P}} = \sqrt{P} (x_0 + y_0 p_0) = 2 x_0 \sqrt{P}$$
 
 Derivative of that w.r.t. dimensionless price:
 
@@ -47,7 +47,7 @@ Other costs to consider:
 2) Uniswap fees earned
 
 3) Impermanent loss (IL) — LP suffers IL vs. hold when price moves, which is the differnce between investment values in case of holding versus providing liquidity:  
-$\quad \text{IL} = 2x_0 \times \sqrt{P} - (x_0 + x_0 P)$; (in this form it's non-positive)
+$\quad \text{IL} = 2x_0 \sqrt{P} - (x_0 + x_0 P)$; (in this form it's non-positive)
 
 4) Entry costs and slippage — entering LP and executing the perp short; on DEX this includes gas/DEX slippage; on CEXs, taker fees.
 
@@ -78,7 +78,7 @@ Liquidity profile is defined by at least 4 variables:
 - One of the following amounts: $x_0$, $y_0$, or $V_0$
 
 Let's denote additional 'virtual' reserves as $X$ and $Y$. The v3 equation for amounts is: $(x_0 + X)(y_0 + Y) = k$ (const)  
-Parallel to v2, when the '$x$' part grows $\sqrt{P}$ times, the other part shrinks reverse proportionally:
+Parallel to v2, when the x part grows $\sqrt{P}$ times, the other part shrinks reverse proportionally:
 
 $\quad (x' + X) = (x_0 + X)\sqrt{P}; \ \ \ \ \ \  (y' + Y) = \frac{(y_0 + Y)}{\sqrt{P}}$
 
@@ -92,13 +92,13 @@ From this:
 $\quad X = \frac{x_0}{\frac{1}{\sqrt{P_a}} - 1}; \ \ \ \ \ \  Y = \frac{y_0}{\sqrt{P_b} - 1}$
 
 
-Let's denote $x_0 + X$ as $\tilde{V_{x0}}$, and $y_0 + Y$ as $\tilde{R_{y0}}$. Then:  
+Let's denote $x_0 + X$ as $\tilde{X_0}$, and $y_0 + Y$ as $\tilde{Y_0}$. Then:  
 
-$\quad x(P) = \tilde{V_{x0}}(\sqrt{P} - \sqrt{P_a}) ;  \ \ \ \ \ \  y(P) = \tilde{R_y}(\frac{1}{\sqrt{P}} - \frac{1}{\sqrt{P_b}})$
+$\quad x(P) = \tilde{X_0}(\sqrt{P} - \sqrt{P_a}) ;  \ \ \ \ \ \  y(P) = \tilde{Y_0}(\frac{1}{\sqrt{P}} - \frac{1}{\sqrt{P_b}})$
 
 We should also note the symmetry at entry, when taking virtual reserves into account. This provides relation between x and y parts of the overall value:  
 
-$$x_0 + X = \frac{x_0}{1 - \sqrt{P_a}} = \tilde{V_{x0}} = \tilde{R_{y0}}  p_0 = (y_0 + Y)  p_0 = p_0 y_0  \frac{1}{1 - \frac{1}{\sqrt{P_b}}} $$
+$$x_0 + X = \frac{x_0}{1 - \sqrt{P_a}} = \tilde{X_0} = \tilde{Y_0}  p_0 = (y_0 + Y)  p_0 = p_0 y_0  \frac{1}{1 - \frac{1}{\sqrt{P_b}}} $$
 <br>
 
 Also, let's tie the initial investment value $V_0$ to $y_0$:
@@ -108,9 +108,9 @@ $$V_0 = y_0 p_0 + x_0 = y_0 p_0 (1 + \frac{1 - \sqrt{P_a}}{1 - \frac{1}{\sqrt{P_
 
 In order to find the hedge amount for delta-neutrality, let's find the dependency of overall value $V$ on dimensionless price $P$:
 
-$$ V(P) = \tilde{V_{x0}}  \sqrt{P} - X + (\frac{\tilde{R_{y0}}}{\sqrt{P}} - Y) p' = \tilde{V_{x0}} \sqrt{P} + \tilde{R_{y0}}  p_0  \sqrt{P} - X - Y \times P p_0 $$
+$$ V(P) = \tilde{X_0}  \sqrt{P} - X + (\frac{\tilde{Y_0}}{\sqrt{P}} - Y) p' = \tilde{X_0} \sqrt{P} + \tilde{Y_0}  p_0  \sqrt{P} - X - Y P p_0 $$
 
-(note: $ p' = P \times p_0$ by definition of $P$ )  
+(note: $p' = P \times p_0$ by definition of $P$ )  
 
 A linear negative term appears here, apparently it accounts for the y reserves that we haven't put, basically 'virtual' reserves of y multiplied by the price at entry - when the price goes up, we are not receiving returns from them (unlike v2 case), hence the negative term.
 
@@ -127,19 +127,19 @@ $$ \frac{dV}{dP}(P = 1) = \frac{(x_0 + y_0 p_0)}{2} + \frac{(X - Y p_{0})}{2}$$
 Interestingly, the first term here is equivalent to the derivative in case of v2.  
 The second seems to be accounting for asymmetry between values of currency and asset put at entry.  
 
-If we take into account the symmetry of virtualized reverves: $ x_0 + X = p_0 (y_0 + Y) $, this can be simplified as:  
+If we take into account the symmetry of virtualized reverves: $x_0 + X = p_0 (y_0 + Y)$, this can be simplified as:  
 
 $$ \frac{dV}{dP}(P = 1) = y_0 p_0 \frac{\sqrt{P_b / P} - 1}{\sqrt{P_b} - 1} $$
 
-Surprisingly, there's no dependency on $P_a$ and correspondingly - propotion of virtual reserves $ X / \tilde{V_{x0}}$.  
-But that makes sense since we formulate everything in terms of currency, and currency value is obviously linear, the constant shift between x and $\tilde{V_x}$ which is X is not affected by the price of the asset, so it doesn't play a role in derivative.  
+Surprisingly, there's no dependency on $P_a$ and correspondingly - propotion of virtual reserves $X / \tilde{X_0}$.  
+But that makes sense since we formulate everything in terms of currency, and currency value is obviously linear, the constant shift between x and $\tilde{X}$ which is X is not affected by the price of the asset, so it doesn't play a role in derivative.  
 
 <br>
 
 When P = 1, this simplifies to just $y_0 p_0$, meaning again, that one should short **the same amount of ETH** that was put in the pool.
 
 In terms of $V_0$:  
-$ \quad y_0 =  V_0 / p_0 / (1 + \frac{1 - \sqrt{P_a}}{1 - 1 / \sqrt{P_b}}) $  
+$\quad y_0 =  V_0 / p_0 / (1 + \frac{1 - \sqrt{P_a}}{1 - 1 / \sqrt{P_b}}) $  
 Since $P_b$ * $P_a \neq 1$, the entry won't be 50/50, it actually is around 47.56% / 52.44% (ETH / USDT, meaning shorting around 0.4756 of overall value invested)
 
 <br>
