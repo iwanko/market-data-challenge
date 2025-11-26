@@ -1,4 +1,4 @@
-
+# 1)  
 For abstraction, let's assume the naming for ETH/USDT pair as 'asset' and 'currency'  
 According to primary formulations from part 1 of  
 https://github.com/runtimeverification/verified-smart-contracts/blob/uniswap/uniswap/x-y-k.pdf  
@@ -34,9 +34,12 @@ https://hacken.io/discover/liquidity-pools/#h-anchor-7
 One should short **the same amount of ETH** that was put in the pool
 
 <br />
-------------------
+
+- - -
 
 <br />
+
+# 2)
 
 **Answer 2:**
 
@@ -54,24 +57,25 @@ $\quad \text{IL} = 2x_0 \sqrt{P} - (x_0 + x_0 P)$; (in this form it's non-positi
 5) Price divergence — mark price on the CEX vs the pool price (and possible temporal difference between entries in case of manual hedging)
 
 <br />
-------------------
+
+- - -
 
 <br />
 
-***Subtask 3:***
+# 3)
 
 In case of v3, we have virtual reserves that 'prop up' our investment.  
 The price bracket for which the liquidity is provided defines the amount put in the pool.  
 (The higher the upper bound for price of the asset, the more of it should be put. The lower the bound - the more currency)  
 
-**Answer 3.v1** (intuitive, found by Nov 10)  
+## Answer 3.1 (intuitive, found by Nov 10)  
   
 As in https://app.uniswap.org/whitepaper-v3.pdf Figure 2, the hyperbolic curve is shifted without changing its shape.  
 But the derivative remains the same. (Increasing P means moving along the curve in direction of x amount rising)  
 Meaning one should short **the same amount of ETH** that was put in the pool.  
 (Of course, with the same amount put in the defined price range, we'd have a completely different liquidity profile compared to v2, and about 20 times more fees earned. Also the hedging would be exposed to much higher risks.)
 
-**Answer 3.v2** (rigorous, Nov 19)
+## Solution 3.2 (rigorous, Nov 19)
 
 Liquidity profile is defined by at least 4 variables:
 - Initial price $p_0$, lowest supported price $p_a$, highest supported price $p_b$
@@ -136,6 +140,8 @@ But that makes sense since we formulate everything in terms of currency, and cur
 
 <br>
 
+### Answer 3.2 
+
 When P = 1, this simplifies to just $y_0 p_0$, meaning again, that one should short **the same amount of ETH** that was put in the pool.
 
 In terms of $V_0$:  
@@ -144,6 +150,9 @@ Since $P_b$ * $P_a \neq 1$, the entry won't be 50/50, it actually is around 47.5
 
 <br>
 <br>
+
+
+- - -
 <br>
 
 *Personal note*: that was an interesting task as I wasn't familiar with Uniswap and barely knew anything specific about DEXs.  
