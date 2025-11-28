@@ -26,31 +26,35 @@ Normally, trades should probably occur closer to TOB than it appears here.
 ![Prices vs Time: Trade prices, Best Bid/Ask, and Mid](./img/2_3_prices_vs_time.png)
 
 
-> Adding this to the above, one can suspect **possible data manipulation** (possibly undersampling).    
+> [!IMPORTANT]  
+> Adding this to the above, one can suspect **possible data manipulation** (possibly undersampling in time dimension).  
 
-- 3) The orderbook is heavily imbalanced toward the BUY side, which contradicts the price mainly moving down over the period presented. *(2.4)*  
+- 3) There are several areas where the shape of the TOB over time looks unnaturally flat. Even when the other side might move in a more or less natural manner. *(plot above)*  
+  
+- 4) The orderbook is heavily imbalanced toward the BUY side, which contradicts the price mainly moving down over the period presented. *(2.4 plot below)*  
 
 ![](./img/2_4.png)
 
 
-- 4) There are several areas on the TOB shape over time which look unnaturally flat. Even when the other side might move in a more or less natural manner.  
 
 
 ## Observation from comparing the price movements to ETHBTC plot from Binance:
 
 - The spread is large when compared even to candlestick plot from Binance for that time period. (This is apparent even by glancing at the plots, without computing the bps values. The candlestick provides resolution up to 15 min, and for each candle one can expect that the spread at any time moment within is bound by the candle swing, but typically should be much smaller by some orders of magnitude.)  
 
-> This (combined with point 2 from above) is another signal to suspect that the **data have been manipulated**: maybe some adaptive number of top levels where removed for several timeranges to produce such a flat profile.  
+> [!IMPORTANT]  
+> This (combined with point 3 from above) is another signal to suspect that the **data have been manipulated**: maybe some adaptive number of top levels where removed for several timeranges to produce such a flat profile.  
 
 A proper comparison would require having similar data piece from a large exchange, but it appears impossible to find free full-orderbook historical updates. (Or even TOB-only).
 
 
 ## Some other small observations:
 
-- 1.1 Significant portion of bids (~69%) doesn't introduce any updates to the previous tick  *(2.6*)
+- 1.1 Significant portion of bids orderbooks (~69%) doesn't introduce any updates to the previous tick  *(2.6*)
 ![](./img/2_6.png)
 - 1.2 Almost a half of ticks (~44%) update only the best level of asks  
 
+> [!IMPORTANT]  
 > This also hints at probability of an **incoherent data nature**.  
 
 - 2) An abnormal volume value is present at one tick in top ask level, which is >2 orders of magnitude higher than typical. The nature of this outlier is unclear
@@ -69,24 +73,27 @@ After all of the above considerations, leaving the inconsistent characteristics 
 ![](./img/2_8_ask.png)
 ![](./img/2_8_bid.png)
 
-- - Applying such trades to present orderbook **would wash away all levels most of the time with overshoot** of 1-2 orders of magnitude *(2.9)*  
+- - Applying such large trades to present orderbook **would sweep off all 50 levels most of the time with overshoot** of 1-2 orders of magnitude *(2.9)*  
 
 ![](./img/2_9.png)
 
-- - Level 50 is several times more distant from the TOB than the other side TOB, thus such trade should be resulting in an extreme price swing, which apparently do not happen in this dataset.  
+- - Level 50 is several times more distant from the TOB than the opposite TOB, so large trades should've been resulting in an extreme price swing, but this apparently does not happen in this dataset. And by taking a look at csv data, one can see that these large trades are not temporally clustered.  
+- - - The plot below is included to show the potential magnitude of the price swing after a 50-level trade in relation to spread:
 
 ![](./img/2_9_1.png)
 
-- - - This group of trades (>10<sup>8</sup>) is either erroneous or completely unrelated to orderbooks  
+- - It seems unlikely that supposed removed levels would contain cumulative volume corresponding to these large trades.
+
+- - - This group of trades (>10<sup>8</sup> in size) is either erroneous or completely unrelated to orderbooks  
 
 
 - Even using Benford's law isn't necessary to see the unfitting nature of the bloated trades. And the number of points is rather insufficient to use this statistic anyways.  
 (https://dn.institute/research/market-health/docs/benford/)
 
 
-> All of the above suggests that part of the trades data is either **erroneous or constructed artificially**
-
-> Also **OB data has been tampered**
+> [!IMPORTANT]  
+> All of the above suggests that part of the trades data is either **erroneous or constructed artificially**  
+> Also **OB may have been tampered**
 
 <br>
 <br>
