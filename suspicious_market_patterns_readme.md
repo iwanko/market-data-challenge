@@ -38,7 +38,7 @@ Normally, trades should probably occur closer to TOB than it appears here.
 
 
 
-## Observation from comparing the price movements to ETHBTC plot from Binance:
+## Observation from comparing the price movements to ETHBTC plot from Binance:  
 
 - The spread is large when compared even to candlestick plot from Binance for that time period. (This is apparent even by glancing at the plots, without computing the bps values. The candlestick provides resolution up to 15 min, and for each candle one can expect that the spread at any time moment within is bound by the candle swing, but typically should be much smaller by some orders of magnitude.)  
 
@@ -57,7 +57,7 @@ A proper comparison would require having similar data piece from a large exchang
 > [!IMPORTANT]  
 > This also hints at probability of an **incoherent data nature**.  
 
-- 2) An abnormal volume value is present at one tick in top ask level, which is >2 orders of magnitude higher than typical. The nature of this outlier is unclear
+- 2) An abnormal volume value is present at one tick in top ask level, which is >2 orders of magnitude higher than typical. The nature of this outlier is unclear, but a hypothesis is presented at part 3.  
 
 <br>
 <br>
@@ -82,9 +82,9 @@ After all of the above considerations, leaving the inconsistent characteristics 
 
 ![](./img/2_9_1.png)
 
-- - It seems unlikely that supposed removed levels would contain cumulative volume corresponding to these large trades.
+- - It seems highly unlikely that supposed removed levels would contain cumulative volume corresponding to these large trades if that was a 'natural' market.  
 
-- - - This group of trades (>10<sup>8</sup> in size) is either erroneous or completely unrelated to orderbooks  
+- - - This group of trades (>10<sup>8</sup> in size) looks like it's unrelated to orderbooks in majority of cases.  
 
 
 - Even using Benford's law isn't necessary to see the unfitting nature of the bloated trades. And the number of points is rather insufficient to use this statistic anyways.  
@@ -92,12 +92,30 @@ After all of the above considerations, leaving the inconsistent characteristics 
 
 
 > [!IMPORTANT]  
-> All of the above suggests that part of the trades data is either **erroneous or constructed artificially**  
+> All of the above suggests that part of the trades data is either **constructed artificially or produced by manipulation**  
 > Also **OB may have been tampered**
+
+
+# 3. Hypothetic conclusion
+
+It's unlikely to see some price manipulation technics (like pump-and-dump) on a large cap token-to-token pair. BTC and ETH are two largest cryptocurrencies, their prices have a lot of correlation (driven by general crypto market fear-greed mood).  
+
+The pattern of the large trades does resemble **wash trading**, but to settle on this conclusion, the data are lacking corresponding opposite trades.  
+
+There are still some hypotheses that can explain the pattern of the data without discarding its credibility.  
+A small number of points can be explained by either:  
+1) Tight rate-limited connection (if the data were collected in real-time) or postprocessing on the exchange side.  
+2) Actual sparsity of the updates sent by some scam exchange.  
+
+Both cases hint on the side of some scam activity - most probably faking the volumes traded so that the exchange looks more established than it actually is.  
+
+Large trades then point to 'invisible' levels which happened to be posted and traded inbetween the orderbook ticks that are present. Also, a large ASK top-level outlier is explainable in this case - it has been taken almost immediately. (And somehow made it into the final dataset, which probably shouldn't have happened, if we suppose intentional manipulation).  
+
+The lack of large SELL trades may be explained by a scheme where insiders made the reverse trade either on some other venue, or via an 'arbitrage triangle' - by selling the base asset for USDT (e.g.) and then buying the quote asset with those USDT. In the latter case, having data from the same venue for ETHUSDT and BTCUSDT would clarify the issue.  
 
 <br>
 <br>
 
 - - -
 
-Some further research may include comparing the data to historical klines for this instrument, and also taking a look at prices of ETH and BTC in USDT. (Even though such comparison is only relevant for non-tampered data)
+Some further research may include comparing the data to historical klines for this instrument (from another venue), and also taking a look at prices of ETH and BTC in USDT. (Even though such comparison is only relevant for non-tampered data)
